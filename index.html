@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>SpaceEye Console</title>
+    <link rel="stylesheet" type="text/css" href="index.css" />
+    <!-- Tell IE to use the latest, best version. -->
+    <!-- Make the application on mobile take up the full browser screen and disable user scaling. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no" />
+    <script type="text/javascript" src="orbit.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="news.js"></script>
+    <link rel="stylesheet" href="node_modules/cesium/Build/Cesium/Widgets/widgets.css">
+
+
+</head>
+
+<body>
+    <header>SpaceEye Console</header>
+
+    <div id="container">
+        <div id="itemA">
+            <div class="table">
+                <p class="textBox cell cp_ipselect cp_sl03">
+                    <select name="camera">
+              <option value="">使用カメラを選択</option>
+              <option value="earth">地球側</option>
+              <option value="space">宇宙側</option>
+            </select>
+                </p>
+                <p>カメラ　撮影パラメータ</p>
+                <p class="textBox cell">
+                    <input class="text" type="range" id="range" min="0" max="1000" value="0" />
+                    <label class="label">露光時間(sec) <span id="value">0</span></label>
+                    <label class="error"></label>
+                </p>
+                <p class="textBox cell">
+                    <input class="text" type="range" id="input_sharpness" min="-100" max="100" value="0" />
+                    <label class="label">シャープネス <span id="value_sharpness">0</span></label>
+                    <label class="error"></label>
+                </p>
+                <p class="textBox cell">
+                    <input class="text" type="range" id="input_contrast" min="-100" max="100" value="0" />
+                    <label class="label">コントラスト <span id="value_contrast">0</span></label>
+                    <label class="error"></label>
+                </p>
+                <p class="textBox cell">
+                    <input class="text" type="range" id="input_brightness" min="-100" max="100" value="0" />
+                    <label class="label">ブライトネス <span id="value_brightness">0</span></label>
+                    <label class="error"></label>
+                </p>
+
+                <p>人工衛星　姿勢パラメータ</p>
+
+                <p class="textBox cell">
+                    <input class="text" type="range" id="input_pitch" min="-180" max="180" value="0" />
+                    <label class="label">ピッチ角(degree) <span id="value_pitch">0</span></label>
+                    <label class="error"></label>
+                </p>
+
+                <p class="textBox cell">
+                    <input class="text" type="range" id="input_roll" min="-180" max="180" value="0" />
+                    <label class="label">ロール角(degree) <span id="value_roll">0</span></label>
+                    <label class="error"></label>
+                </p>
+
+                <p class="textBox cell">
+                    <input class="text" type="range" id="input_yaw" min="-180" max="180" value="0" />
+                    <label class="label">ヨー角(degree) <span id="value_yaw">0</span></label>
+                    <label class="error"></label>
+                </p>
+
+                <br>
+                <a href="" class="btn btn--yellow btn--cubic">衛星にコマンド送信</a>
+                <br>
+                <p style="color: white; font-size: 12px;">※この画面はプロトタイプです。<br>実際に人工衛星にコマンド送信されることはありません。</p>
+            </div>
+        </div>
+        <div id="itemB">
+            <h3>SpaceEye人工衛星　現在地</h3>
+            <div id="cesium" class="cesium"></div>
+            <script src="node_modules/cesium/Build/Cesium/Cesium.js"></script>
+            <script src="main.js"></script>
+
+        </div>
+        <div id="itemC">
+            <ul id="ul_news">
+                <li><a href="#">JST 2021/4/4 おうし座λ星が極小</a></li>
+                <li><a href="#">JST 2021/4/21 C/2020 P3アトラス彗星が近日点を通過</a></li>
+                <li><a href="#">JST 2021/8/12〜13 ペルセウス座流星群</a></li>
+                <li><a href="#">JST 2021/10/8　りゅう座流星群</a></li>
+            </ul>
+
+            <div class="title">直近の天文イベント</div>
+            <div id="div_ticker4" class="tick"></div>
+        </div>
+    </div>
+</body>
+
+<script>
+    // パラメータのレンジスライダー
+    var elem = document.getElementById("range");
+    var target = document.getElementById("value");
+    var rangeValue = function(elem, target) {
+        return function(evt) {
+            target.innerHTML = elem.value;
+        };
+    };
+    elem.addEventListener("input", rangeValue(elem, target));
+
+    var elem = document.getElementById("input_sharpness");
+    var target = document.getElementById("value_sharpness");
+    var rangeValue = function(elem, target) {
+        return function(evt) {
+            target.innerHTML = elem.value;
+        };
+    };
+    elem.addEventListener("input", rangeValue(elem, target));
+
+    var elem = document.getElementById("input_contrast");
+    var target = document.getElementById("value_contrast");
+    var rangeValue = function(elem, target) {
+        return function(evt) {
+            target.innerHTML = elem.value;
+        };
+    };
+    elem.addEventListener("input", rangeValue(elem, target));
+
+    var elem = document.getElementById("input_brightness");
+    var target = document.getElementById("value_brightness");
+    var rangeValue = function(elem, target) {
+        return function(evt) {
+            target.innerHTML = elem.value;
+        };
+    };
+    elem.addEventListener("input", rangeValue(elem, target));
+
+    var elem = document.getElementById("input_pitch");
+    var target = document.getElementById("value_pitch");
+    var rangeValue = function(elem, target) {
+        return function(evt) {
+            target.innerHTML = elem.value;
+        };
+    };
+    elem.addEventListener("input", rangeValue(elem, target));
+
+    var elem = document.getElementById("input_roll");
+    var target = document.getElementById("value_roll");
+    var rangeValue = function(elem, target) {
+        return function(evt) {
+            target.innerHTML = elem.value;
+        };
+    };
+    elem.addEventListener("input", rangeValue(elem, target));
+    var elem = document.getElementById("input_yaw");
+    var target = document.getElementById("value_yaw");
+    var rangeValue = function(elem, target) {
+        return function(evt) {
+            target.innerHTML = elem.value;
+        };
+    };
+    elem.addEventListener("input", rangeValue(elem, target));
+</script>
+
+</html>
